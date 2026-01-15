@@ -1,6 +1,7 @@
 import { useState } from "react";
 import { useAuth } from "../context/AuthContext";
 import { useNavigate } from "react-router-dom";
+import toast from "react-hot-toast";
 
 // Login Page Component
 const LoginPage = () => {
@@ -18,8 +19,10 @@ const LoginPage = () => {
     }
     setError("");
     try {
+      toast.loading("Loading..");
       await sendOTP(email);
     } catch (error) {
+      toast.error("error sending otp mail");
       console.log("error occured in handle login: ", error);
       return;
     }
@@ -55,8 +58,10 @@ const LoginPage = () => {
     }
     try {
       await verifyOTP(email, otpValue);
+      toast.success("OTP verified");
       navigate("/");
     } catch (error) {
+      toast.success("Error verifying OTP");
       console.log("error occured in handleOTPVerification: ", error);
       return;
     }
