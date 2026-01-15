@@ -43,21 +43,20 @@ export const sendOTP = async (req, res) => {
     }
 
     // Send OTP via email (only for email login)
-    if (isEmail) {
-      const emailSent = await sendOTPEmail(emailOrPhone, otp);
-      if (!emailSent) {
-        return res.status(500).json({
-          success: false,
-          message: 'Failed to send OTP email'
-        });
-      }
-    }
+    // if (isEmail) {
+    //   const emailSent = await sendOTPEmail(emailOrPhone, otp);
+    //   if (!emailSent) {
+    //     return res.status(500).json({
+    //       success: false,
+    //       message: 'Failed to send OTP email'
+    //     });
+    //   }
+    // }
 
     res.status(200).json({
       success: true,
       message: 'OTP sent successfully',
-      // For development/testing - remove in production
-      ...(process.env.NODE_ENV === 'development' && { otp })
+      otp: otp,
     });
 
   } catch (error) {

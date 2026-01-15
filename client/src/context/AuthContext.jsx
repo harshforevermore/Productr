@@ -20,8 +20,11 @@ export const AuthProvider = ({ children }) => {
   /* 1️⃣ SEND OTP */
   const sendOTP = async (emailOrPhone) => {
     try {
-      await axiosClient.post("/auth/send-otp", { emailOrPhone });
+      const tost = toast.loading("loading...");
+      const res = await axiosClient.post("/auth/send-otp", { emailOrPhone });
+      toast.dismiss(tost);
       toast.success("OTP sent successfully");
+      toast.success(`Your OTP is: ${res.data.otp}`);
     } catch (error) {
       throw error.response?.data?.message || "Failed to send OTP";
     }

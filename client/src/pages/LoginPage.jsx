@@ -19,11 +19,11 @@ const LoginPage = () => {
     }
     setError("");
     try {
-      const tost = toast.loading("Loading..");
       await sendOTP(email);
-      toast.dismiss(tost);
+      
     } catch (error) {
-      toast.error("error sending otp mail");
+      // toast.error("error sending otp mail");
+      toast.dismissAll();
       console.log("error occured in handle login: ", error);
       return;
     }
@@ -60,9 +60,10 @@ const LoginPage = () => {
     try {
       await verifyOTP(email, otpValue);
       toast.success("OTP verified");
+      
       navigate("/");
     } catch (error) {
-      toast.success("Error verifying OTP");
+      toast.error("Error verifying OTP");
       console.log("error occured in handleOTPVerification: ", error);
       return;
     }
