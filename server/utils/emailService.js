@@ -1,20 +1,3 @@
-// import nodemailer from "nodemailer";
-// import { createEtherealTransporter } from "./ethereal.js";
-
-// export const sendOTPEmail = async () => {
-//   const { transporter, testAccount } = await createEtherealTransporter();
-
-//   const info = await transporter.sendMail({
-//     from: '"Dev App" <dev@app.com>',
-//     to: "user@example.com",
-//     subject: "OTP Test",
-//     text: "Your OTP is 123456",
-//     html: "<b>Your OTP is 123456</b>",
-//   });
-
-//   console.log("Preview URL:", nodemailer.getTestMessageUrl(info));
-// };
-
 import nodemailer from 'nodemailer';
 
 const getEmailConfig = () => ({

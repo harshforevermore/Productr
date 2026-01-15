@@ -62,6 +62,10 @@ const LoginPage = () => {
     }
   };
 
+  const handleResendOTP = () => {
+    setFormState("login");
+  };
+
   return (
     <div className="flex items-center justify-center w-full min-h-screen px-8 bg-[#F7F8FA]">
       <div className="left-image flex-1">
@@ -169,7 +173,7 @@ const LoginPage = () => {
                 <span className="text-gray-500 text-sm">
                   Didnt recive OTP ?{" "}
                 </span>
-                <button className="cursor-pointer text-[#071074] font-semibold text-sm">
+                <button onClick={handleResendOTP} className="cursor-pointer text-[#071074] font-semibold text-sm">
                   Resend
                 </button>
               </div>
