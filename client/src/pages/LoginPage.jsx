@@ -19,8 +19,9 @@ const LoginPage = () => {
     }
     setError("");
     try {
-      toast.loading("Loading..");
+      const tost = toast.loading("Loading..");
       await sendOTP(email);
+      toast.dismiss(tost);
     } catch (error) {
       toast.error("error sending otp mail");
       console.log("error occured in handle login: ", error);
