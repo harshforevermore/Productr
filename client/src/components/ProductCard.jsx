@@ -94,7 +94,7 @@ const ProductCard = ({ product }) => {
             <div className="flex justify-between">
               <span className="text-[#98A2B3]">Exchange Eligibility -</span>
               <span className="text-[#344054]">
-                {product.exchangeEligible.toLowerCase() === "yes" ? "Yes" : "No"}
+                {product.exchangeEligible && product.exchangeEligible.toLowerCase() === "yes" ? "Yes" : "No"}
               </span>
             </div>
           </div>
