@@ -9,9 +9,9 @@ const PRODUCT_TYPES = [
   "others",
 ];
 
-const AddProductModal = ({ isOpen, onClose }) => {
+const UpdateProductModal = ({ isOpen, onClose, product }) => {
   const modal = useRef(null);
-  const { addProduct } = useProducts();
+  const { updateProduct } = useProducts();
 
   useEffect(() => {
     const handleClickOutside = (e) => {
@@ -27,18 +27,20 @@ const AddProductModal = ({ isOpen, onClose }) => {
     };
   }, [onClose]);
 
-  const [images, setImages] = useState([]);
-  const [imageUrls, setImageUrls] = useState([]);
+  const [images, setImages] = useState(
+    product.images?.map((url) => ({ url, file: null })) || []
+  );
+  const [imageUrls, setImageUrls] = useState(product.images || []);
   const [errors, setErrors] = useState({});
   const [formData, setFormData] = useState({
-    productName: "",
-    productType: "",
-    quantity: "",
-    mrp: "",
-    sellingPrice: "",
-    brandName: "",
-    images: [],
-    exchangeEligible: "",
+    productName: product.productName || "",
+    productType: product.productType || "",
+    quantity: product.quantity || "",
+    mrp: product.mrp || "",
+    sellingPrice: product.sellingPrice || "",
+    brandName: product.brandName || "",
+    images: product.images || [],
+    exchangeEligible: product.exchangeEligible,
   });
 
   if (!isOpen) return null;
@@ -47,6 +49,7 @@ const AddProductModal = ({ isOpen, onClose }) => {
     setFormData({ ...formData, [e.target.name]: e.target.value });
     setErrors({ ...errors, [e.target.name]: "" });
   };
+
   const handleImageUpload = (e) => {
     const files = Array.from(e.target.files);
     const previews = files.map((file) => ({
@@ -59,15 +62,15 @@ const AddProductModal = ({ isOpen, onClose }) => {
   };
 
   const removeImage = (index) => {
-  setImages((prev) => prev.filter((_, i) => i !== index));
-  setImageUrls((prev) => prev.filter((_, i) => i !== index));
-};
+    setImages((prev) => prev.filter((_, i) => i !== index));
+    setImageUrls((prev) => prev.filter((_, i) => i !== index));
+  };
 
   const validate = () => {
     const newErrors = {};
 
     Object.entries(formData).forEach(([key, value]) => {
-      if (!value) newErrors[key] = "This field is required";
+      if (!value && key !== "images") newErrors[key] = "This field is required";
     });
 
     if (images.length === 0) {
@@ -87,7 +90,7 @@ const AddProductModal = ({ isOpen, onClose }) => {
       images: imageUrls,
     };
 
-    addProduct(finalData);
+    updateProduct(product._id, finalData);
     onClose();
   };
 
@@ -104,7 +107,7 @@ const AddProductModal = ({ isOpen, onClose }) => {
       >
         {/* Header */}
         <div className="flex items-center justify-between pb-2 mb-3 border-b border-b-gray-200">
-          <h2 className="text-lg font-semibold">Add Product</h2>
+          <h2 className="text-lg font-semibold">Update Product</h2>
           <button
             onClick={onClose}
             className="cursor-pointer text-lg text-gray-500"
@@ -113,7 +116,7 @@ const AddProductModal = ({ isOpen, onClose }) => {
           </button>
         </div>
 
-        <form onSubmit={handleSubmit} className="space-y-4">
+        <div className="space-y-4">
           {/* Product Name */}
           <div>
             <label className="text-sm font-medium">Product Name</label>
@@ -223,7 +226,7 @@ const AddProductModal = ({ isOpen, onClose }) => {
             <label className="text-sm font-medium">Upload Product Images</label>
             <div className="mt-1 flex items-center justify-center w-full">
               <label
-                htmlFor="dropzone-file"
+                htmlFor="dropzone-file-update"
                 className="flex flex-col items-center justify-center w-full h-20 border border-dashed border-gray-400 cursor-pointer"
               >
                 <div className="flex flex-col items-center justify-center text-body pt-5 pb-6">
@@ -231,7 +234,7 @@ const AddProductModal = ({ isOpen, onClose }) => {
                   <p className="text-md font-bold">Browse</p>
                 </div>
                 <input
-                  id="dropzone-file"
+                  id="dropzone-file-update"
                   type="file"
                   multiple
                   accept="image/*"
@@ -244,7 +247,7 @@ const AddProductModal = ({ isOpen, onClose }) => {
               <p className="text-sm text-red-500 mt-1">{errors.images}</p>
             )}
 
-            <div className="flex gap-3">
+            <div className="flex gap-3 mt-2 flex-wrap">
               {images.map((img, index) => (
                 <div key={index} className="relative">
                   <img
@@ -289,16 +292,17 @@ const AddProductModal = ({ isOpen, onClose }) => {
           {/* Submit */}
           <div className="flex justify-end">
             <button
-              type="submit"
+              type="button"
+              onClick={handleSubmit}
               className="cursor-pointer rounded-lg font-medium px-6 py-2 text-white bg-linear-to-b from-[#000FB4] to-[#4050FF]"
             >
-              Create
+              Update
             </button>
           </div>
-        </form>
+        </div>
       </div>
     </div>
   );
 };
 
-export default AddProductModal;
+export default UpdateProductModal;

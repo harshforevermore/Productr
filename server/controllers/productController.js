@@ -194,7 +194,11 @@ export const deleteProduct = async (req, res) => {
 
 // Publish/Unpublish product
 export const togglePublish = async (req, res) => {
+  console.log("TogglePublish");
   try {
+    console.log("req.params: ", req.params);
+    console.log("req.user: ", req.user);
+    console.log("req.body: ", req.body);
     const product = await Product.findOne({
       _id: req.params.id,
       userId: req.user._id

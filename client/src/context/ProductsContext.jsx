@@ -10,16 +10,34 @@ export const useProducts = () => useContext(ProductsContext);
 export const ProductsProvider = ({ children }) => {
   const {user} = useAuth();
   const [products, setProducts] = useState([]);
+  const [publishedProducts, setPublishedProducts] = useState([]);
+  const [unPublishedProducts, setUnPublishedProducts] = useState([]);
   const [loading, setLoading] = useState(false);
 
+  useEffect(() => {
+    if(products.length !== 0) {
+      setPublishedProducts(() => products.filter((product) => product.isPublished));
+      setUnPublishedProducts(() => products.filter((product) => !product.isPublished));
+    }
+    console.log(products);
+  }, [products]);
+  useEffect(() => {
+    if(user) {
+      fetchProducts();
+    }
+  }, [user]);
   /* FETCH ALL PRODUCTS */
   const fetchProducts = async () => {
     try {
       setLoading(true);
-      const { data } = await axiosClient.get("/products");
-      setProducts(data);
+      const {data} = await axiosClient.get("/products");
+      console.log("products: ", data.products);
+      setProducts(data.products);
+      setPublishedProducts(() => data.products.filter((product) => product.isPublished));
+      setUnPublishedProducts(() => data.products.filter((product) => !product.isPublished));
     } catch (error) {
       toast.error("Failed to fetch products");
+      console.log("error while fetching the products: ", error.response?.data?.message);
     } finally {
       setLoading(false);
     }
@@ -29,11 +47,12 @@ export const ProductsProvider = ({ children }) => {
   const addProduct = async (productData) => {
     try {
       const { data } = await axiosClient.post("/products", productData);
-      setProducts((prev) => [...prev, data]);
+      setProducts((prev) => Array.isArray(prev) ? [...prev, data] : [data]);
       toast.success("Product added");
       return data;
     } catch (error) {
-      throw error.response?.data?.message || "Failed to add product";
+      toast.error("Failed to add product");
+      console.log("error while adding the product: ", error.response?.data?.message);
     }
   };
 
@@ -41,51 +60,46 @@ export const ProductsProvider = ({ children }) => {
   const updateProduct = async (id, updatedData) => {
     try {
       const { data } = await axiosClient.put(`/products/${id}`, updatedData);
-      setProducts((prev) =>
-        prev.map((product) => (product.id === id ? data : product))
-      );
+      await fetchProducts();
       toast.success("Product updated");
       return data;
     } catch (error) {
-      throw error.response?.data?.message || "Failed to update product";
+      toast.error("Failed to update product");
+      console.log("error while updating the product: ", error.response?.data?.message);
     }
   };
-
+  
   /* DELETE PRODUCT */
   const deleteProduct = async (id) => {
     try {
       await axiosClient.delete(`/products/${id}`);
-      setProducts((prev) => prev.filter((product) => product.id !== id));
+      await fetchProducts();
       toast.success("Product deleted");
     } catch (error) {
-      throw error.response?.data?.message || "Failed to delete product";
+      toast.error("Failed to delete product");
+      console.log("error while deleting the product: ", error.response?.data?.message);
     }
   };
 
   /* TOGGLE PUBLISH */
-  const togglePublish = async (id) => {
+  const togglePublish = async (productId) => {
     try {
-      const { data } = await axiosClient.patch(
-        `/products/${id}/toggle-publish`
+      await axiosClient.patch(
+        `/products/${productId}/toggle-publish`
       );
-      setProducts((prev) =>
-        prev.map((product) => (product.id === id ? data : product))
-      );
+      await fetchProducts();
     } catch (error) {
-      throw error.response?.data?.message || "Failed to toggle publish";
+      toast.error("Failed to toggle publish");
+  console.log("error while toggling publish: ", error.response?.data?.message);
     }
   };
-
-  useEffect(() => {
-    if(user) {
-      fetchProducts();
-    }
-  }, [user]);
 
   return (
     <ProductsContext.Provider
       value={{
         products,
+        publishedProducts,
+        unPublishedProducts,
         loading,
         fetchProducts,
         addProduct,

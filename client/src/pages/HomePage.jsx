@@ -4,8 +4,9 @@ import { useProducts } from "../context/ProductsContext";
 import ProductCard from "../components/ProductCard";
 
 const HomePage = () => {
-  const {products} = useProducts();
+  const {products, publishedProducts, unPublishedProducts} = useProducts();
   const [selectedTab, setSelectedTab] = useState("published");
+
   return (
     <div className="home-page-container w-full h-full">
       <section className="tabs w-full flex items-center gap-6 px-8 border-b border-b-[#D1D5DB]">
@@ -16,35 +17,40 @@ const HomePage = () => {
           <h3>Unpublished</h3>
         </section>
       </section>
-      <section className="products w-full h-full">
+      <section className="products w-full h-full py-8 px-14">
+        
         {selectedTab === "published" ? (
-          products.count === 0 ? (
+          publishedProducts.length === 0 ? (
             <EmptyState
               heading="No Published Products"
               description="Your Published Products will appear here 
 Create your first product to publish"
             />
           ) : (
-            products.map(
+            <section className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+            {products.map(
               (product) =>
-                product.status === "published" && (
+                product.isPublished && (
                   <ProductCard key={product.id} product={product} />
                 )
-            )
+            )}
+            </section>
           )
-        ) : products.count === 0 ? (
+        ) : unPublishedProducts.length === 0 ? (
           <EmptyState
             heading="No Unpublished Products"
             description="Your Unpublished Products will appear here
 Create your first product to publish "
           />
         ) : (
-          products.map(
+          <section className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+          {products.map(
             (product) =>
-              product.status === "unpublished" && (
+              !product.isPublished && (
                 <ProductCard key={product.id} product={product} />
               )
-          )
+          )}
+          </section>
         )}
       </section>
     </div>
