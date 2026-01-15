@@ -70,14 +70,19 @@ const LoginPage = () => {
           {/*  */}
           <div className="z-40 absolute linear-background w-3/4 h-full opacity-40 rounded-2xl bg-linear-to-b from-[#010860] from-0% via-[#002283] via-19% via-[#734AA3] via-38% via-[#E7959C] via-57% via-[#E4A182] via-77% to-[#BF3613] to-100%"></div>
           <img
-            src="../../images/main_bg.png"
+            src="/images/main_bg.png"
             alt="background image"
             className="z-30 background-img w-3/4 h-3/4 border border-[#D4D4D4] rounded-2xl"
           />
           <img
-            src="../../images/main_top.png"
+            src="/images/main_top.png"
             alt="running person image"
             className="top-img z-50 absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-xs h-xs"
+          />
+          <img
+            src="/images/logo_dark.png"
+            alt="logo"
+            className="logo-img z-60 absolute top-3 left-27 w-45 h-10"
           />
         </div>
       </div>

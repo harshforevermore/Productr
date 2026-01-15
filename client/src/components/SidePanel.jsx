@@ -14,7 +14,7 @@ const SidePanel = ({selectedPage, setSelectedPage}) => {
     <div className="sidepanel w-[240px] min-h-full bg-[#1D222B]">
       <section className="border-b border-b-[#4b4b4b]">
         <section className="logo w-full px-4 py-3">
-          <img src="../../images/logo_white.png" className="w-3/4" alt="Productr logo" />
+          <img src="/images/logo_white.png" className="w-3/4" alt="Productr logo" />
         </section>
         <section className="search relative flex justify-center mb-4">
           <span className="search-icon z-99 absolute top-2.5 left-4">

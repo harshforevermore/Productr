@@ -14,7 +14,7 @@ const ProductsPage = () => {
 
   return (
     <div className="products-page-container w-full h-full py-8 px-14 bg-gray-50">
-      {products.length > 0 ? (
+      {Array.isArray(products) && products.length > 0 ? (
         <>
           <div className="flex justify-between items-center mb-3">
             <h1 className="text-xl font-bold text-gray-800">Products</h1>

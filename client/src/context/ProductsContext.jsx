@@ -15,7 +15,7 @@ export const ProductsProvider = ({ children }) => {
   const [loading, setLoading] = useState(false);
 
   useEffect(() => {
-    if(products.length !== 0) {
+    if(Array.isArray(products) && products.length !== 0) {
       setPublishedProducts(() => products.filter((product) => product.isPublished));
       setUnPublishedProducts(() => products.filter((product) => !product.isPublished));
     }
@@ -33,8 +33,8 @@ export const ProductsProvider = ({ children }) => {
       const {data} = await axiosClient.get("/products");
       console.log("products: ", data.products);
       setProducts(data.products);
-      setPublishedProducts(() => data.products.filter((product) => product.isPublished));
-      setUnPublishedProducts(() => data.products.filter((product) => !product.isPublished));
+      setPublishedProducts(() => Array.isArray(data.products) ? data.products.filter((product) => product.isPublished) : []);
+      setUnPublishedProducts(() => Array.isArray(data.products) ? data.products.filter((product) => !product.isPublished) : []);
     } catch (error) {
       toast.error("Failed to fetch products");
       console.log("error while fetching the products: ", error.response?.data?.message);

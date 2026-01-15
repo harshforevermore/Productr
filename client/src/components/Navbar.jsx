@@ -50,7 +50,7 @@ const Navbar = ({ selectedPage }) => {
         </section>
         <section className="user-profile flex items-center gap-2">
           <img
-            src="../../images/profile.jpg"
+            src="/images/profile.jpg"
             className="profile-pic w-9 h-9 object-cover rounded-full"
             alt="user profile picture"
           />
