@@ -1,9 +1,10 @@
 import axios from 'axios';
 
 const axiosClient = axios.create({
-  baseURL: 'http://localhost:3000/api',
+  baseURL: import.meta.env.VITE_API_URL,
   withCredentials: true,
 });
+
 axiosClient.interceptors.request.use((config) => {
   const user = localStorage.getItem("productr-user");
   if (user) {
@@ -11,4 +12,5 @@ axiosClient.interceptors.request.use((config) => {
   }
   return config;
 });
+
 export default axiosClient;
