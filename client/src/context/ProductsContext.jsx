@@ -47,7 +47,7 @@ export const ProductsProvider = ({ children }) => {
   const addProduct = async (productData) => {
     try {
       const { data } = await axiosClient.post("/products", productData);
-      setProducts((prev) => Array.isArray(prev) ? [...prev, data] : [data]);
+      setProducts((prev) => Array.isArray(prev) ? [...prev, data.product] : [data.product]);
       toast.success("Product added");
       return data;
     } catch (error) {
